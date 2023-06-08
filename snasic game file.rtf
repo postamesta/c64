@@ -1,0 +1,266 @@
+1 HS=0:GOSUB900
+2 GOTO500
+5 Q=-1:N=0:P=50
+10 PRINT"♥S"
+11 POKE53281,0:POKE53280,0
+18 IF LV=1 THEN GOSUB1850:GOSUB1900
+20 IF LV=2 THEN GOSUB2000
+22 IF LV=3 THEN GOSUB2200
+24 IF LV=4 THEN GOSUB2350
+25 IF LV=5 THEN GOSUB2480
+45 A1=1601:A2=1602:A3=1603:A4=1604:A5=1605:A6=1606:A7=1607:A8=1608:A9=1609
+47 B1=1610:B2=1611:B3=1612:B4=1613:B5=1614:B6=1615:B7=1616:B8=1617
+51 POKEA1,27:POKEA2,28:POKEA3,28:POKEA4,28:POKEA5,28:POKEA6,28:POKEA7,28
+52 POKEA8,28:POKEA9,28:POKEB1,28:POKEB2,28:POKEB3,28:POKEB4,28:POKEB5,28
+53 POKEB6,28:POKEB7,28:POKEB8,32
+100 JOY=PEEK(56320)
+110 IF JOY=126 THENQ=-40
+115 IF JOY=125 THENQ=40
+120 IF JOY=123 THENQ=-1
+130 IF JOY=119 THENQ=1
+133 REM GAME ROUTINE
+136 B8=B7:B7=B6:B6=B5:B5=B4:B4=B3:B3=B2:B2=B1:B1=A9:A9=A8:A8=A7:A7=A6:A6=A5
+140 A5=A4:A4=A3:A3=A2:A2=A1:A1=A1+Q
+150 IFPEEK(A1)=29THENLF=LF-1:GOSUB850:GOTO640 REM HIT WALL
+151 IFPEEK(A1)=28THENLF=LF-1:GOSUB830:GOTO640:REM HIT BODY
+152 IFPEEK(A1)=30THENSC=SC+10:N=N+1:P=P-5:GOSUB800: REM EAT FRUIT
+153 IFN=10 AND LV=5 THEN POKE731,5:SYS730:GOSUB918: GOTO930: REM GAME ENDING
+154 IFN=10THEN LV=LV+1:GOTO640: REM NEXT LEVEL
+155 POKEA1,27:POKEA2,28:POKEB8,32
+157 FORT=1TOP:NEXT
+160 GOTO100
+200 REM INCREASING LEVEL
+221 FORT=1TO10:POKE54277,64:POKE54276,17:POKE54273,17:POKE54272,37
+222 POKE54276,0:POKE54277,0:POKE54273,0
+223 FORKL=1TO100:NEXT:POKE54277,128:POKE54276,17:POKE54273,40:POKE54272,43
+225 FORKL=1TO100:NEXT:POKE54276,0:POKE54277,0:POKE54273,0:NEXTT
+230 FORT=1TO10:X=INT(RND(1)*912)+41
+235 IFPEEK(1024+X)<>32THENX=INT(RND(1)*912)+41:GOTO235
+240 POKE1024+X,30:POKE55296+X,1
+250 NEXTT
+260 N=0
+270 GOTO155
+300 PRINT"♥": GOSUB 1850:REM GAME OVER
+301 IFSC<HSTHENHS=HS
+302 IFSC>HSTHENHS=SC
+303 IFSC=HSTHENHS=SC
+305 PRINT"SQQQQQQ]]]]]]]]]]]THIS GAME IS OVER"
+308 IFLF=3THENPRINT"QQ]]]]]]]]]]]LIVES BONUS = 150":SC=SC+150
+310 PRINT"QQQ]]]]]]]]]]]πRTOTAL SCORE "SC
+312 PRINT"QQ]]]]]]]]TODAY'S TOP SCORE: "HS
+320 PRINT"QQ]]]]]]]]]]]]↑FIRE TO RESTART"
+322 PRINT"Q]]]]]]]]]]]]↑JOY DOWN - QUIT♦ "
+325 JOY=PEEK(56320)
+330 IFJOY=111THENLV=1:LF=3:POKE731,10:SYS730:POKE53281,0:GOTO500
+340 IFJOY=125THEN SYS64738
+350 GOTO325
+500 POKE53281,0:POKE53280,0:POKE731,9:SYS730:REM INTRO SCREEN
+504 PRINT CHR$(147)
+506 FOR DC=1 TO 33
+508 POKE646,DC:PRINT"SQQQQQQ]]]]]]]]]]]]]]]BASIC SNAKE";
+510 NEXT DC
+516 CA=1024:CP=54272:R=25:CO=40
+518 FORW=3TO2:FORI=1TO4:FORJ=0TO5:K=I+J
+520 C=J+J+J/(I+3)+I*W/15
+522 K1=CA+I+(CO*K):I1=CA+K+(CO*I):C1=CP+K1:C2=CP+I1
+524 K2=CA+(CO-I)+(CO*(R-K)):I2=CA+(CO-K)+(CO*(R-I)):C3=CP+K2:C4=CP+I2
+526 K3=CA+(CO-I)+(CO*K):C5=CP+K3:I3=CA+K+(CO*(R-I)):C6=CP+I3
+528 K4=CA+(CO-K)+(CO*I):C7=CP+K4:I4=CA+I+(CO*(R-K)):C8=CP+I4
+530 POKE K1,29:POKE C1,C:POKE I1,29:POKE C2,C
+532 POKE K2,29:POKE C3,C:POKE I2,29:POKE C4,C
+534 POKE K3,29:POKE C5,C:POKE I3,29:POKE C6,C
+536 POKE K4,29:POKE C7,C:POKE I4,29:POKE C8,C
+538 NEXTJ,I,W
+540 PRINT"SQQQQQQQQ]]]]]]]]]]BY EMANUELE MARTORELLI"
+541 PRINT"SQQQQQQQQQ]]]]]]]]]]]]]]]]](C)2021"
+542 PRINT"SQQQQQQQQQQQ]]]]]]]]]]]╳BASED ON THE CODE BY"
+544 PRINT"SQQQQQQQQQQQQ]]]]]]]]]]]]]]]JUSTIN VETTA"
+546 PRINT"SQQQQQQQQQQQQQQ]]]]]]]]]]]]]♦64SID MUSIC FROM"
+548 PRINT"SQQQQQQQQQQQQQQQ]]]]]]]]]]]GEORGE FEIL'S SAMPLER"
+550 PRINT"SQQQQQQQQQQQQQQQQQ]]]]]]]]]]]]PRESS FIRE TO START♦ "
+578 LV=1:LF=3:SC=0
+584 JOY=PEEK(56320)
+590 IFJOY=111 THEN GOTO640:POKE731,10:SYS730:REM START GAME
+600 GOTO584
+640 REM INTRO LEVELS SCREEN
+643 IFLF=0 THEN GOSUB6500: GOTO300: REM GAME OVER
+645 PRINT"♥]]]]]LEVEL";LV
+646 IFLV=1THENPRINT"Q]]]]]";LA$
+647 IFLV=2THENPRINT"Q]]]]]";LB$
+648 IFLV=3THENPRINT"Q]]]]]";LC$
+650 IFLV=4THENPRINT"Q]]]]]";LD$
+652 IFLV=5THENPRINT"Q]]]]]";LF$
+654 IFLV=6THENPRINT"Q]]]]]";LG$
+680 PRINT"Q]]]]] LIVES ";LF
+685 PRINT"Q]]]]] SCORE ";SC
+690 PRINT"Q]]] PRESS FIRE TO START PLAY"
+691 IFLV=2THENPRINT"◥ ":IFLV=3THENPRINT" "
+692 IFLV=4THENPRINT"♦ ":IFLV=5THENPRINT"£ "
+700 JOY=PEEK(56320)
+710 IFJOY=111THENPOKE53281,1:GOTO5
+720 GOTO700
+800 POKE54296,15
+810 FORT=1TO5:POKE54277,64:POKE54276,17:POKE54273,17:POKE54272,37
+815 FORKL=1TO5:NEXT:POKE54276,0:POKE54277,0:POKE54273,0:NEXTT
+820 RETURN
+830 REM BITE SOUND
+831 QO=53265:WC=128:BO=53280:WAIT QO,WC
+833 POKEBO,1:POKEBO,2:POKEBO,3:POKEBO,4:POKEBO,5:POKEBO,6:POKEBO,0
+834 POKE54296,8: POKE54278,240: POKE54277,0: POKE54276,33
+835 FORCV=1TO20
+837 FORNV=30-CVTO35-CVSTEP-1
+839 POKE54273,NV:NEXTNV:NEXTCV
+843 POKE 53276,0:POKE54273,0:POKE54296,0:POKE54278,0:POKE 54277,0
+845 RETURN
+850 REM EXPLOSION
+852 QO=53265:WC=128:BO=53280
+853 WAIT QO,WC
+854 POKEBO,1:POKEBO,2:POKEBO,3:POKEBO,4:POKEBO,5:POKEBO,6:POKEBO,0
+855 VV=54296:WW=54276:AA=54277:HH=54273:LL=54272
+860 FOR XP=15TO0STEP-1:POKEVV,XP:POKEWW,129:
+865 POKE AA,15:POKEHH,40:POKELL,200:NEXT
+870 POKE WW,0:POKEAA,0
+875 RETURN
+900 LA$="GOOD OLD SNAKE":LB$="SNAKES NEVER SLEEPS":LC$="AN EASY WAY OUT"
+905 LD$="COMING HOME":LF$="RUN SNAKE RUN"
+915 RETURN
+918 FORWU=1TO1000:NEXTWU:PRINT"♥"
+920 PRINT"SQQQ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]";
+921 PRINT"                               ♠]]]]]]]]]";
+922 PRINT"                             ]]]]]]]]]]]";
+923 PRINT"                              ╳]]]]]]]]]]";
+924 PRINT"                              ]]╳]]]╳]]]╳]]";
+925 PRINT"                              ]]╳]]]]]]]]";
+926 PRINT"                              ]]╳]]]]]]]]";
+927 PRINT"]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]";:RETURN
+930 REM ENDING SCREEN
+936 FORPZ=0TO25
+937 PRINT"SQQQQQQQQQ"TAB(PZ)"££££££["
+938 FORI=1TO100:NEXT
+939 PRINT"SQQQQQQQQQ"TAB(PZ)" ££££££["
+940 NEXTPZ
+950 PRINT"♦ ":GOTO 300
+1850 REM BORDER SCREEN
+1855 FORT=1024TO1063:POKET,29:NEXT
+1860 FORT=1063TO2023STEP40:POKET,29:NEXT
+1865 FORT=2023TO1984STEP-1:POKET,29:NEXT
+1870 FORT=1984TO1024STEP-40:POKET,29:NEXT
+1880 RETURN
+1900 POKE 731,10: SYS730:P=P-50:PRINT"♦]":REM LEVEL 1
+1925 FORT=1TO12:X=INT(RND(1)*912)+41
+1930 IFPEEK(1024+X)<>32THENX=INT(RND(1)*912)+41:GOTO1930
+1935 POKE1024+X,30:POKE55296+X,1:NEXTT
+1937 FORT=1TO40:X=INT(RND(1)*959)+40:POKE1024+X,29:NEXTT
+1950 RETURN
+2000 POKE 731,10: SYS730: REM REM LEVEL 2
+2005 PRINT "S◥]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]";
+2010 PRINT "]                                      ]";
+2015 PRINT "]                                      ]";
+2020 PRINT "] E↑◥]]]]   ]]]] E↑◥  ]]]]    ]]]]   ]]]]  ]";
+2025 PRINT "]  ]                                ]  ]";
+2030 PRINT "]  ] ]]E↑◥                         ]] ]  ]";
+2035 PRINT "]  ] ]                           E↑◥] ]  ]";
+2040 PRINT "]      ]]]]   ]]]]    ]]]]E↑◥  ]]]]      ]";
+2045 PRINT "]      ]                        ]      ]";
+2050 PRINT "]      ]   ]]]]   ]]]]   ]]]]   ]      ]";
+2055 PRINT "]  ]   ]   ]                ]   ]   ]  ]";
+2060 PRINT "]  ]       ]E↑◥  ]        ]   ]       ]  ]";
+2065 PRINT "]              ] ]]]]]] ]       E↑◥      ]";
+2070 PRINT "]  ]       ]   ]        ]   ]       ]  ]";
+2075 PRINT "]  ]   ]   ]                ]   ]   ]  ]";
+2080 PRINT "]      ]   ]]]]   ]]]]   ]]]]   ]      ]";
+2085 PRINT "]      ]      E↑◥                 ]      ]";
+2090 PRINT "]      ]]]]   ]]]]    ]]]]   ]]]]      ]";
+2095 PRINT "]  ] ]                            ] ]  ]";
+2100 PRINT "]  ] ]]                          ]] ]  ]";
+2105 PRINT "]  ]E↑◥                              E↑◥]  ]";
+2110 PRINT "]  ]]]]   ]]]]    ]]]]    ]]]]   ]]]]  ]";
+2115 PRINT "]                                      ]";
+2120 PRINT "]                                      ]";
+2125 PRINT "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]◥]";:POKE2023,29
+2130 RETURN
+2200 POKE 731,10: SYS730:P=P-15: REM LEVEL 3
+2205 PRINT "S ]]]]]]]]]]]]]]         ]]]]]]]]]]]]]]]"
+2208 PRINT "]]            ]         ]             ]]";
+2211 PRINT "]             ]         ]              ]";
+2214 PRINT "] E↑    ]]]    ]]]]]]]]]]]    ]]]     E↑ ]";
+2217 PRINT "]      ]           E↑           ]       ]";
+2220 PRINT "] ]]]         ]]]]]]]]]]]          ]]] ]";
+2223 PRINT "] ] ]         ]         ]          ] ] ]";
+2226 PRINT "] ] ]         ]         ]          ] ] ]";
+2229 PRINT "] ] ]         ]         ]          ] ] ]";
+2232 PRINT "] ] ]]]]]]]]]]]    E↑↑   ]]]]]]]]]]]] ] ]";
+2235 PRINT "] ]                                  ] ]";
+2238 PRINT "] ]                                  ] ]";
+2241 PRINT "] ]                                  ] ]";
+2244 PRINT "] ]]]]]]]]]]]]]]]]]  ]]]]]]]]]]]]]]]]] ]";
+2247 PRINT "]                                      ]";
+2250 PRINT "]]]]] ]]]]]]]]]]]]]]]]]]]]]]]]]]] ]]]]]]";
+2253 PRINT "    ] ]   ]                  ]  ] ]"
+2256 PRINT "    ]E↑]        ]   E↑    ]       ]E↑]"
+2259 PRINT "    ] ]        ]        ]       ] ]"
+2262 PRINT "]]]]] ]        ]        ]       ] ]]]]]]";
+2265 PRINT "]         ]]  ]]        ]]  ]]         ]";
+2268 PRINT "]  ]]     ]       ]]]]       ]     ]]  ]";
+2271 PRINT "]  E↑      ]                  ]      E↑  ]";
+2274 PRINT "]]                                    ]]";
+2277 PRINT " ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]";
+2330 RETURN
+2350 POKE 731,10: SYS730 :P=P-10:REM LEVEL 4
+2352 PRINT "S♦    ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]"
+2353 PRINT "    ]                              ]"
+2356 PRINT "    ]                              ]"
+2359 PRINT "    ]                              ]"
+2362 PRINT "]]]]]  E↑♦  ]]]]]]]]]]]]]]]]]]]]  E↑♦  ]]]]]";
+2365 PRINT "]        ]]                  ]]        ]";
+2368 PRINT "]        ]                    ]        ]";
+2371 PRINT "]        ]]]]]]]]]]]]]]]]]]]]]]        ]";
+2374 PRINT "]]] ]]]]                 E↑♦      ]]]] ]]]";
+2377 PRINT "  ] ]  ]                        ]  ] ]"
+2380 PRINT "  ] ]  ] ]]]]]]]]]]]]]]]]]]]]]] ]  ] ]"
+2383 PRINT "  ] ]  ]      E↑♦                 ]  ] ]"
+2386 PRINT "  ]E↑♦]  ]                        ]E↑♦ ] ]"
+2389 PRINT "  ] ]  ] ]]]]]]]]]]]]]]]]]]]]]] ]  ] ]"
+2392 PRINT "  ] ]  ]                        ]  ] ]"
+2395 PRINT "  ] ]  ]                 E↑♦         ] ]"
+2398 PRINT "  ] ]  ] ]]]]]]]]]]]]]]]]]]]]]] ]  ] ]"
+2401 PRINT "  ] ]  ]      E↑♦                 ]  ] ]"
+2404 PRINT "]]] ]]]]                        ]]]] ]]]";
+2407 PRINT "]]] ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]] ]]]";
+2410 PRINT "]]] ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]] ]]]";
+2413 PRINT "]]]    ]]]]]]]]]]]]]]]]]]]]]]]]]]    ]]]";
+2416 PRINT "]]]]]] E↑♦]]]]]]]]]]]]]]]]]]]]]]]]E↑♦ ]]]]]]";
+2419 PRINT "]]]]]]]                          ]]]]]]]";
+2422 PRINT " ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]";
+2475 RETURN
+2480 POKE 731,10:SYS730:P=P-220:REM LEVEL 5
+2482 PRINT "S£ ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]"
+2484 PRINT "]]]                                  ]]]";
+2486 PRINT "]]E↑£   ]        ]       ]         ]   E↑£]]";
+2488 PRINT "]    ]]       ]]]     ]]]        ]]    ]";
+2490 PRINT "]     ] E↑£]     ]  E↑£]]  ]     E↑£]  ]     ]";
+2492 PRINT "]       ]]]       ]]]]       ]]]       ]";
+2494 PRINT "]   ]    ]   ]]    ]]    ]]   ]    ]   ]";
+2496 PRINT "]  ]]]      ]]]]        ]]]]      ]]]  ]";
+2498 PRINT "]   ]        ]]          ]]        ]   ]";
+2500 PRINT "]                ]    ]                ]";
+2502 PRINT "]               ]]    ]]               ]";
+2504 PRINT "] ]    ]]          ]]          ]]    ] ]";
+2506 PRINT "]  ]  ]]]]        ]]]]        ]]]]  ]  ]";
+2508 PRINT "] ]    ]]          ]]          ]]    ] ]";
+2510 PRINT "]                                      ]";
+2512 PRINT "]               ]]    ]]               ]";
+2514 PRINT "]   ]        ]]  ]    ]  ]]        ]   ]";
+2516 PRINT "]  ]]]      ]]]]        ]]]]      ]]]  ]";
+2518 PRINT "]   ]    ]   ]]    ]]E↑£   ]]        ]   ]";
+2520 PRINT "]       ]]]       ]]]]        ]E↑£       ]";
+2522 PRINT "]     ]E↑£ ]      ]  ]]  ]     ]]] ]     ]";
+2524 PRINT "]    ]]        ]]]    ]]]     ]  ]]    ]";
+2526 PRINT "]]E↑£   ]         ]      ]         ]   E↑£]]";
+2528 PRINT "]]]                                  ]]]";
+2530 PRINT " ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]";
+2535 RETURN
+6500 REM MELODY SUBROUTINE
+6505 POKE 731,2:SYS730
+6508 FOR VB=1 TO 1000: NEXT VB
+6510 RETURN
